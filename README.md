@@ -3,7 +3,8 @@ An open world head-to-head tank fight game with simple AI, terrain, and advanced
 
 This is my personal implementation of the project with the same name from "The Unreal Engine Developer Course" on Udemy.
 
-**Last completed lecture:** Upgrading Engine Version (7/113)
+**Last completed lecture:** 3rd Person Camera Control (14/113)
 
 ### Features:
-- Basic landscape
+- Basic textured landscape sculpted using Unreal
+- High quality tank model ([T90 by milosbaskic](https://www.cgtrader.com/free-3d-models/military/vehicle/russian-military-vehicles-t90))
