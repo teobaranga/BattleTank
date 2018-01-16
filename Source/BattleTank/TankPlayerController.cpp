@@ -31,7 +31,11 @@ void ATankPlayerController::AimTowardsCrosshair()
 	FVector HitLocation;
 	if (GetSightRayHitLocation(HitLocation))
 	{
-
+		GetPawn()->AimAt(HitLocation);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No hit"));
 	}
 }
 
@@ -48,15 +52,12 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) cons
 	if (DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, WorldLocation, WorldDirection))
 	{
 		/// Line-trace along that look direction, and see what we hit (up to a max range)
-		FHitResult OutHitLocation;
-		if (GetWorld()->LineTraceSingleByChannel(OutHitLocation, WorldLocation, WorldLocation + WorldDirection * LineTraceRange,
+		FHitResult HitResult;
+		if (GetWorld()->LineTraceSingleByChannel(HitResult, WorldLocation, WorldLocation + WorldDirection * LineTraceRange,
 												ECollisionChannel::ECC_Visibility))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Hit in direction %s"), *OutHitLocation.ImpactPoint.ToCompactString());
-		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("No hit"));
+			OutHitLocation = HitResult.Location;
+			return true;
 		}
 	}
 

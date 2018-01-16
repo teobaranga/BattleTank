@@ -6,6 +6,8 @@
 #include "GameFramework/Pawn.h"
 #include "TankPawn.generated.h"
 
+class UTankAimingComponent;
+
 UCLASS()
 class BATTLETANK_API ATankPawn : public APawn
 {
@@ -15,17 +17,24 @@ public:
 	// Sets default values for this pawn's properties
 	ATankPawn();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	
+	void AimAt(FVector HitLocation);
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UTankAimingComponent* TankAimingComponent = nullptr;
+
+private:
+	// Muzzle velocity
+	UPROPERTY(EditAnywhere, Category="Projectile")
+	float LaunchSpeed = 150000.f; // 1500 m/s
 	
 };
