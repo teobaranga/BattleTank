@@ -11,30 +11,30 @@ class UTankAimingComponent;
 UCLASS()
 class BATTLETANK_API ATankPawn : public APawn
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	// Sets default values for this pawn's properties
-	ATankPawn();
+    // Sets default values for this pawn's properties
+    ATankPawn();
 
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+    // Called every frame
+    virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+    // Called to bind functionality to input
+    virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	void AimAt(FVector HitLocation);
+    void AimAt(FVector HitLocation);
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+    // Called when the game starts or when spawned
+    virtual void BeginPlay() override;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	UTankAimingComponent* TankAimingComponent = nullptr;
+    UPROPERTY(BlueprintReadOnly, EditAnywhere)
+    UTankAimingComponent* TankAimingComponent = nullptr;
 
 private:
-	// Muzzle velocity
-	UPROPERTY(EditAnywhere, Category="Projectile")
-	float LaunchSpeed = 150000.f; // 1500 m/s
-	
+    // Muzzle velocity
+    UPROPERTY(EditAnywhere, Category="Projectile")
+    float LaunchSpeed = 150000.f; // 1500 m/s
+    
 };

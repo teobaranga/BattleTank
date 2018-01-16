@@ -14,17 +14,17 @@
 UCLASS()
 class BATTLETANK_API ATankAIController : public AAIController
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 protected:
-	virtual void BeginPlay() override;
-	
+    virtual void BeginPlay() override;
+    
 public:
-	virtual void Tick(float DeltaTime) override;
+    virtual void Tick(float DeltaTime) override;
 
-	// Get the Tank Pawn controlled by this AI
-	ATankPawn* GetPawn() const;
+    // Get the Tank Pawn controlled by this AI
+    ATankPawn* GetPawn() const;
 
-	// Get the Tank Pawn controlled by the player
-	ATankPawn* GetPlayerTank() const;
+    // Get the Tank Pawn controlled by the player
+    ATankPawn* GetPlayerTank() const;
 };

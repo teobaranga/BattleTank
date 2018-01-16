@@ -8,34 +8,34 @@
 
 void ATankAIController::BeginPlay()
 {
-	Super::BeginPlay();
+    Super::BeginPlay();
 }
 
 void ATankAIController::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+    Super::Tick(DeltaTime);
 
-	if (ATankPawn* Tank = GetPawn())
-	{
-		if (ATankPawn* PlayerTank = GetPlayerTank())
-		{
-			Tank->AimAt(PlayerTank->GetActorLocation());
-		}
-	}
+    if (ATankPawn* Tank = GetPawn())
+    {
+        if (ATankPawn* PlayerTank = GetPlayerTank())
+        {
+            Tank->AimAt(PlayerTank->GetActorLocation());
+        }
+    }
 }
 
 ATankPawn* ATankAIController::GetPawn() const
 {
-	return Cast<ATankPawn>(AController::GetPawn());
+    return Cast<ATankPawn>(AController::GetPawn());
 }
 
 ATankPawn * ATankAIController::GetPlayerTank() const
 {
-	if (ATankPlayerController* tankPlayerController = Cast<ATankPlayerController>(GetWorld()->GetFirstPlayerController()))
-	{
-		return tankPlayerController->GetPawn();
-	}
+    if (ATankPlayerController* tankPlayerController = Cast<ATankPlayerController>(GetWorld()->GetFirstPlayerController()))
+    {
+        return tankPlayerController->GetPawn();
+    }
 
-	UE_LOG(LogTemp, Error, TEXT("Unexpected player controller. Player Tank could not be found."));
-	return nullptr;
+    UE_LOG(LogTemp, Error, TEXT("Unexpected player controller. Player Tank could not be found."));
+    return nullptr;
 }
