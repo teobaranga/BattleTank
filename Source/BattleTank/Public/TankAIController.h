@@ -2,15 +2,12 @@
 
 #pragma once
 
-#include "Public/TankPawn.h"
-
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include "TankAIController.generated.h"
 
-/**
- * 
- */
+class ATankPawn;
+
 UCLASS()
 class BATTLETANK_API ATankAIController : public AAIController
 {

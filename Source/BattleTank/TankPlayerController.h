@@ -2,24 +2,23 @@
 
 #pragma once
 
-#include "Public/TankPawn.h"
-
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"
 
-/**
- * 
- */
+class ATankPawn;
+
 UCLASS()
 class BATTLETANK_API ATankPlayerController : public APlayerController
 {
     GENERATED_BODY()
     
 public:
+    // Note: must match UI
     UPROPERTY(EditAnywhere)
     float CrosshairXLocation = 0.5f;
 
+    // Note: must match UI
     UPROPERTY(EditAnywhere)
     float CrosshairYLocation = 1 / 3.0f;
 

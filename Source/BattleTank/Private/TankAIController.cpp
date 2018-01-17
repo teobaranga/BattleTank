@@ -4,6 +4,7 @@
 
 #include "Engine/World.h"
 
+#include "Public/TankPawn.h"
 #include "TankPlayerController.h"
 
 void ATankAIController::BeginPlay()

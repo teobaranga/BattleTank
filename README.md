@@ -6,7 +6,7 @@ An open world head-to-head tank fight game with simple AI, terrain, and advanced
 
 This is my personal implementation of the project with the same name from "The Unreal Engine Developer Course" on Udemy.
 
-**Last completed lecture:** `BlueprintSpawnableComponent()` (40/113)
+**Last completed lecture:** How to Report Bugs (42/113)
 
 ### Features:
 - Basic textured landscape sculpted using Unreal

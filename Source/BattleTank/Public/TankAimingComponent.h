@@ -48,6 +48,7 @@ private:
 
     void MoveBarrel(const FVector& AimDirection);
 
-    void ElevateBarrel(float DegreesPerSecond);
+    // -1 is max downward speed, +1 is max up movement
+    void ElevateBarrel(float RelativeSpeed);
     
 };

@@ -44,7 +44,7 @@ void UTankAimingComponent::MoveBarrel(const FVector& AimDirection)
     UE_LOG(LogTemp, Warning, TEXT("Barrel vector %s"), *AimRotator.ToCompactString());
 }
 
-void UTankAimingComponent::ElevateBarrel(float DegreesPerSecond)
+void UTankAimingComponent::ElevateBarrel(float RelativeSpeed)
 {
 }
 

@@ -4,6 +4,8 @@
 
 #include "Engine/World.h"
 
+#include "Public/TankPawn.h"
+
 void ATankPlayerController::BeginPlay()
 {
     Super::BeginPlay();
