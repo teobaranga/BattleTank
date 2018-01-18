@@ -28,5 +28,8 @@ void ATankPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void ATankPawn::AimAt(FVector HitLocation)
 {
-    TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
+    if (TankAimingComponent->IsRegistered())
+    {
+        TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
+    }
 }

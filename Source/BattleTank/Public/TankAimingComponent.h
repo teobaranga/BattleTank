@@ -17,12 +17,6 @@ public:
     // Sets default values for this component's properties
     UTankAimingComponent();
 
-    // Called every frame
-    virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-    UFUNCTION(BlueprintCallable)
-    void SetBarrel(UStaticMeshComponent* Barrel);
-
     void AimAt(FVector Location, float LaunchSpeed);
 
 protected:
@@ -30,13 +24,19 @@ protected:
     virtual void BeginPlay() override;
 
 private:
+    UStaticMeshComponent* Turret = nullptr;
+
     UStaticMeshComponent* Barrel = nullptr;
 
     USceneComponent* BarrelRotator = nullptr;
 
-    // Maximum movement speed of the barrel, in degrees per second
+    // Maximum elevation speed of the barrel, in degrees per second
     UPROPERTY(EditAnywhere)
-    float MaxDegreesPerSecond = 20.f;
+    float MaxElevationSpeed = 5.f;
+
+    // Maximum rotation speed of the turret, in degrees per second
+    UPROPERTY(EditAnywhere)
+    float MaxRotationSpeed = 15.f;
 
     // Minimum barrel elevation in degrees
     UPROPERTY(EditAnywhere)
@@ -48,7 +48,10 @@ private:
 
     void MoveBarrel(const FVector& AimDirection);
 
+    // Move the barrel up or down
     // -1 is max downward speed, +1 is max up movement
     void ElevateBarrel(float RelativeSpeed);
     
+    // Rotate the turret around its Z-axis
+    void RotateBarrel(float RelativeSpeed);
 };
