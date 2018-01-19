@@ -108,7 +108,7 @@ void UTankAimingComponent::AimAt(FVector Location, float LaunchSpeed)
         )
     {
         FVector AimDirection = TossVelocity.GetSafeNormal();
-        UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"), *GetOwner()->GetName(), *AimDirection.ToCompactString());
+        //UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"), *GetOwner()->GetName(), *AimDirection.ToCompactString());
         MoveBarrel(AimDirection);
     }
 }

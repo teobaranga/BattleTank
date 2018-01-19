@@ -30,6 +30,9 @@ protected:
     UTankAimingComponent* TankAimingComponent = nullptr;
 
 private:
+    UFUNCTION(BlueprintCallable)
+    void Fire();
+
     // Muzzle velocity
     UPROPERTY(EditAnywhere, Category="Projectile")
     float LaunchSpeed = 150000.f; // 1500 m/s

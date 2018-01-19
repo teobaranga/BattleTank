@@ -19,6 +19,11 @@ void ATankPawn::BeginPlay()
     Super::BeginPlay();
 }
 
+void ATankPawn::Fire()
+{
+    UE_LOG(LogTemp, Warning, TEXT("Fire!"));
+}
+
 // Called to bind functionality to input
 void ATankPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
