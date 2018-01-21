@@ -7,6 +7,8 @@
 #include "TankPawn.generated.h"
 
 class UTankAimingComponent;
+class UTankMovementComponent;
+class AProjectile;
 
 UCLASS()
 class BATTLETANK_API ATankPawn : public APawn
@@ -22,19 +24,30 @@ public:
 
     void AimAt(FVector HitLocation);
 
+    UFUNCTION(BlueprintCallable)
+    void Fire();
+
 protected:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
 
-    UPROPERTY(BlueprintReadOnly, EditAnywhere)
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     UTankAimingComponent* TankAimingComponent = nullptr;
 
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+    UTankMovementComponent* TankMovementComponent = nullptr;
+
 private:
-    UFUNCTION(BlueprintCallable)
-    void Fire();
+    UPROPERTY(EditDefaultsOnly, Category="Projectile")
+    TSubclassOf<AProjectile> Projectile = nullptr;
 
     // Muzzle velocity
-    UPROPERTY(EditAnywhere, Category="Projectile")
-    float LaunchSpeed = 150000.f; // 1500 m/s
+    UPROPERTY(EditDefaultsOnly, Category="Projectile")
+    float LaunchSpeed = 150000; // 1500 m/s
+
+    UStaticMeshComponent* Barrel = nullptr;
     
+    double ReloadTime = 2;
+
+    double LastFireTime = 0;
 };

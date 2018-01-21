@@ -15,15 +15,15 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
     
 public:
     // Note: must match UI
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditDefaultsOnly)
     float CrosshairXLocation = 0.5f;
 
     // Note: must match UI
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditDefaultsOnly)
     float CrosshairYLocation = 1 / 3.0f;
 
     /* Line trace range, in meters. Default: 10km */
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditDefaultsOnly)
     float LineTraceRange = 1000000.0f;
 
     virtual void BeginPlay() override;

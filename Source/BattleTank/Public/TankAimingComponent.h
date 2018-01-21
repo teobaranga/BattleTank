@@ -31,19 +31,19 @@ private:
     USceneComponent* BarrelRotator = nullptr;
 
     // Maximum elevation speed of the barrel, in degrees per second
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditDefaultsOnly)
     float MaxElevationSpeed = 5.f;
 
     // Maximum rotation speed of the turret, in degrees per second
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditDefaultsOnly)
     float MaxRotationSpeed = 15.f;
 
     // Minimum barrel elevation in degrees
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditDefaultsOnly)
     float MinElevation = 0.f;
 
     // Maximum barrel elevation in degrees
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditDefaultsOnly)
     float MaxElevation = 35.f;
 
     void MoveBarrel(const FVector& AimDirection);
