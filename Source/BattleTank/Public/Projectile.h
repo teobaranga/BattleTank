@@ -11,24 +11,24 @@ class UProjectileMovementComponent;
 UCLASS()
 class BATTLETANK_API AProjectile : public AActor
 {
-	GENERATED_BODY()
-	
+    GENERATED_BODY()
+    
 public:	
-	// Sets default values for this actor's properties
-	AProjectile();
+    // Sets default values for this actor's properties
+    AProjectile();
 
 protected:
-	// Called when the game starts or when spawned
+    // Called when the game starts or when spawned
     virtual void BeginPlay() override;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     UProjectileMovementComponent* ProjectileMovementComponent = nullptr;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+    // Called every frame
+    virtual void Tick(float DeltaTime) override;
 
     // Launch this projectile
     void Launch(float Speed);
-	
+    
 };

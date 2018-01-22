@@ -24,4 +24,8 @@ public:
 
     // Get the Tank Pawn controlled by the player
     ATankPawn* GetPlayerTank() const;
+
+private:
+    // How close the AI can get to the player
+    float AcceptanceRadius = 3000.f;
 };
