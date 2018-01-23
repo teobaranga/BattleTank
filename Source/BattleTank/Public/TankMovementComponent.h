@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright (c) 2018 Teo Baranga
 
 #pragma once
 
@@ -15,16 +15,17 @@ class BATTLETANK_API UTankMovementComponent : public UNavMovementComponent
     GENERATED_BODY()
     
 public:
-    UFUNCTION(BlueprintCallable)
+    UFUNCTION(BlueprintCallable, Category = "Setup")
     void Initialize(UStaticMeshComponent* Tank, UStaticMeshComponent* LeftTrack, UStaticMeshComponent* RightTrack);
 
     // Set the tracks throttle to a value between -1 and 1
-    UFUNCTION(BlueprintCallable)
+    UFUNCTION(BlueprintCallable, Category = "Input")
     void MoveForwardIntent(float Throw);
 
-    UFUNCTION(BlueprintCallable)
+    UFUNCTION(BlueprintCallable, Category = "Input")
     void TurnRightIntent(float Throw);
 
+    // Function called indirectly by the AI controller, which provides info needed to move to the requested target
     void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;
 
 private:

@@ -1,7 +1,8 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright (c) 2018 Teo Baranga
 
 #include "TankMovementComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "GameFramework/Actor.h"
 
 const FName UTankMovementComponent::TrackForceSocketName = FName("Force");
 
@@ -20,13 +21,13 @@ void UTankMovementComponent::MoveForwardIntent(float Throw)
         UE_LOG(LogTemp, Error, TEXT("Missing tank or tracks, cannot move forward"));
         return;
     }
-    /// TODO: clamp throttle value
 
-    FVector ForceApplied = LeftTrack->GetRightVector() * Throw * MaxDrivingForce;
+    /// Forwards force
+    FVector ForceApplied = Tank->GetRightVector() * Throw * MaxDrivingForce;
+
     FVector ForceLocation = LeftTrack->GetSocketLocation(TrackForceSocketName);
     Tank->AddForceAtLocation(ForceApplied, ForceLocation);
 
-    ForceApplied = RightTrack->GetRightVector() * Throw * MaxDrivingForce;
     ForceLocation = RightTrack->GetSocketLocation(TrackForceSocketName);
     Tank->AddForceAtLocation(ForceApplied, ForceLocation);
 }
@@ -50,5 +51,12 @@ void UTankMovementComponent::TurnRightIntent(float Throw)
 
 void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed)
 {
-    UE_LOG(LogTemp, Warning, TEXT("RequestDirectMove: %s"), *MoveVelocity.ToCompactString());
+    FVector TankForward = GetOwner()->GetActorRightVector().GetSafeNormal();
+    FVector TankMoveDirection = MoveVelocity.GetSafeNormal();
+
+    /// Move forward towards the player
+    MoveForwardIntent(FVector::DotProduct(TankForward, TankMoveDirection));
+
+    /// Rotate towards the player
+    TurnRightIntent(FVector::CrossProduct(TankForward, TankMoveDirection).Z);
 }
