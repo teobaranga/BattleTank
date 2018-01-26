@@ -19,6 +19,9 @@ public:
     // Sets default values for this pawn's properties
     ATankPawn();
 
+    UFUNCTION(BlueprintCallable)
+    void Initialize(UStaticMeshComponent* Barrel);
+
     // Called to bind functionality to input
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -28,9 +31,6 @@ public:
     void Fire();
 
 protected:
-    // Called when the game starts or when spawned
-    virtual void BeginPlay() override;
-
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     UTankAimingComponent* TankAimingComponent = nullptr;
 

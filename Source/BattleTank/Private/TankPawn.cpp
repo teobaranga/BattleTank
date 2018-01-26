@@ -18,26 +18,25 @@ ATankPawn::ATankPawn()
     TankMovementComponent = CreateDefaultSubobject<UTankMovementComponent>(FName("Movement"));
 }
 
-// Called when the game starts or when spawned
-void ATankPawn::BeginPlay()
+void ATankPawn::Initialize(UStaticMeshComponent* Barrel)
 {
-    Super::BeginPlay();
+    this->Barrel = Barrel;
+}
 
-    /// Get the barrel
-    TArray<UActorComponent*> BarrelComponents = GetComponentsByTag(USceneComponent::StaticClass(), FName("Barrel"));
-    for (UActorComponent* BarrelComponent : BarrelComponents)
+// Called to bind functionality to input
+void ATankPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+    // Input is done in blueprints
+}
+
+void ATankPawn::AimAt(FVector HitLocation)
+{
+    if (!TankAimingComponent->IsRegistered())
     {
-        if (BarrelComponent->ComponentTags.Num() == 1)
-        {
-            Barrel = Cast<UStaticMeshComponent>(BarrelComponent);
-        }
-    }
-    if (!Barrel)
-    {
-        UE_LOG(LogTemp, Error, TEXT("Barrel not found on the tank, destroying..."));
-        Destroy();
         return;
     }
+
+    TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
 }
 
 void ATankPawn::Fire()
@@ -59,20 +58,4 @@ void ATankPawn::Fire()
         ProjectileInstance->Launch(LaunchSpeed);
         LastFireTime = FPlatformTime::Seconds();
     }
-}
-
-// Called to bind functionality to input
-void ATankPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-    // Input is done in blueprints
-}
-
-void ATankPawn::AimAt(FVector HitLocation)
-{
-    if (!TankAimingComponent->IsRegistered())
-    {
-        return;
-    }
-
-    TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
 }

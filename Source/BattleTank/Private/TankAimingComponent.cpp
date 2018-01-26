@@ -11,46 +11,11 @@ UTankAimingComponent::UTankAimingComponent()
     PrimaryComponentTick.bCanEverTick = false;
 }
 
-// Called when the game starts
-void UTankAimingComponent::BeginPlay()
+void UTankAimingComponent::Initialize(UStaticMeshComponent* Turret, UStaticMeshComponent* Barrel, UStaticMeshComponent* BarrelRotator)
 {
-    Super::BeginPlay();
-
-    /// Find the turret component
-    TArray<UActorComponent*> Turrets = GetOwner()->GetComponentsByTag(UStaticMeshComponent::StaticClass(), FName("Turret"));
-    if (Turrets.Num() == 0)
-    {
-        UE_LOG(LogTemp, Error, TEXT("Turret not found"));
-        DestroyComponent();
-        return;
-    }
-    Turret = Cast<UStaticMeshComponent>(Turrets[0]);
-
-    /// Find the barrel and its rotator
-    TArray<UActorComponent*> Barrels = GetOwner()->GetComponentsByTag(USceneComponent::StaticClass(), FName("Barrel"));
-    for (UActorComponent* Barrel : Barrels)
-    {
-        if (Barrel->ComponentTags.Num() == 1)
-        {
-            this->Barrel = Cast<UStaticMeshComponent>(Barrel);
-        }
-        else if (Barrel->ComponentHasTag(FName("Rotator")))
-        {
-            BarrelRotator = Cast<USceneComponent>(Barrel);
-        }
-    }
-    if (!Barrel)
-    {
-        UE_LOG(LogTemp, Error, TEXT("Barrel not found"));
-        DestroyComponent();
-        return;
-    }
-    if (!BarrelRotator)
-    {
-        UE_LOG(LogTemp, Error, TEXT("Barrel rotator not found"));
-        DestroyComponent();
-        return;
-    }
+    this->Turret = Turret;
+    this->Barrel = Barrel;
+    this->BarrelRotator = BarrelRotator;
 }
 
 void UTankAimingComponent::MoveBarrel(const FVector& AimDirection)

@@ -39,7 +39,7 @@ ATankPawn * ATankAIController::GetPlayerTank() const
 {
     if (ATankPlayerController* tankPlayerController = Cast<ATankPlayerController>(GetWorld()->GetFirstPlayerController()))
     {
-        return tankPlayerController->GetPawn();
+        return tankPlayerController->GetTankPawn();
     }
 
     UE_LOG(LogTemp, Error, TEXT("Unexpected player controller. Player Tank could not be found."));

@@ -18,14 +18,14 @@ void ATankPlayerController::PlayerTick(float DeltaTime)
     AimTowardsCrosshair();
 }
 
-ATankPawn* ATankPlayerController::GetPawn() const
+ATankPawn* ATankPlayerController::GetTankPawn() const
 {
     return Cast<ATankPawn>(AController::GetPawn());
 }
 
 void ATankPlayerController::AimTowardsCrosshair()
 {
-    if (!GetPawn())
+    if (!GetTankPawn())
     {
         return;
     }
@@ -33,7 +33,7 @@ void ATankPlayerController::AimTowardsCrosshair()
     FVector HitLocation;
     if (GetSightRayHitLocation(HitLocation))
     {
-        GetPawn()->AimAt(HitLocation);
+        GetTankPawn()->AimAt(HitLocation);
     }
     else
     {

@@ -30,7 +30,8 @@ public:
 
     virtual void PlayerTick(float DeltaTime) override;
 
-    ATankPawn* GetPawn() const;
+    UFUNCTION(BlueprintCallable)
+    ATankPawn* GetTankPawn() const;
     
 private:
     /* 
