@@ -5,10 +5,16 @@
 #include "Engine/World.h"
 
 #include "Public/TankPawn.h"
+#include "Public/TankAimingComponent.h"
 
 void ATankPlayerController::BeginPlay()
 {
     Super::BeginPlay();
+    UTankAimingComponent* TankAimingComponent = GetTankPawn()->FindComponentByClass<UTankAimingComponent>();
+    if (TankAimingComponent)
+    {
+        FoundAimingComponent(TankAimingComponent);
+    }
 }
 
 void ATankPlayerController::PlayerTick(float DeltaTime)
@@ -25,7 +31,7 @@ ATankPawn* ATankPlayerController::GetTankPawn() const
 
 void ATankPlayerController::AimTowardsCrosshair()
 {
-    if (!GetTankPawn())
+    if (!ensure(GetTankPawn()))
     {
         return;
     }

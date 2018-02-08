@@ -2,7 +2,6 @@
 
 #include "TankPawn.h"
 #include "TankAimingComponent.h"
-#include "TankMovementComponent.h"
 #include "Projectile.h"
 #include "Engine/World.h"
 #include "Components/StaticMeshComponent.h"
@@ -15,7 +14,6 @@ ATankPawn::ATankPawn()
     PrimaryActorTick.bCanEverTick = false;
 
     TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming"));
-    TankMovementComponent = CreateDefaultSubobject<UTankMovementComponent>(FName("Movement"));
 }
 
 void ATankPawn::Initialize(UStaticMeshComponent* Barrel)
@@ -31,7 +29,7 @@ void ATankPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void ATankPawn::AimAt(FVector HitLocation)
 {
-    if (!TankAimingComponent->IsRegistered())
+    if (!ensure(TankAimingComponent->IsRegistered()))
     {
         return;
     }

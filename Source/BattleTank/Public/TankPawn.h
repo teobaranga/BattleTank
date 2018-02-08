@@ -7,7 +7,6 @@
 #include "TankPawn.generated.h"
 
 class UTankAimingComponent;
-class UTankMovementComponent;
 class AProjectile;
 
 UCLASS()
@@ -34,16 +33,13 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     UTankAimingComponent* TankAimingComponent = nullptr;
 
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-    UTankMovementComponent* TankMovementComponent = nullptr;
-
 private:
     UPROPERTY(EditDefaultsOnly, Category="Projectile")
     TSubclassOf<AProjectile> Projectile = nullptr;
 
     // Muzzle velocity
     UPROPERTY(EditDefaultsOnly, Category="Projectile")
-    float LaunchSpeed = 150000; // 1500 m/s
+    float LaunchSpeed = 4000; // 4000 cm/s
 
     UStaticMeshComponent* Barrel = nullptr;
     

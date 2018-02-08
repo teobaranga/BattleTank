@@ -9,7 +9,7 @@
 /**
  * Component responsible for driving the tank tracks
  */
-UCLASS()
+UCLASS(ClassGroup = (Tank), meta = (BlueprintSpawnableComponent))
 class BATTLETANK_API UTankMovementComponent : public UNavMovementComponent
 {
     GENERATED_BODY()
