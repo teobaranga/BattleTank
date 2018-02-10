@@ -18,6 +18,8 @@ public:
     // Sets default values for this pawn's properties
     ATankPawn();
 
+    void BeginPlay();
+
     UFUNCTION(BlueprintCallable)
     void Initialize(UStaticMeshComponent* Barrel);
 
@@ -46,4 +48,6 @@ private:
     double ReloadTime = 2;
 
     double LastFireTime = 0;
+
+    bool canFire = false;
 };

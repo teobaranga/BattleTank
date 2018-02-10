@@ -16,6 +16,20 @@ ATankPawn::ATankPawn()
     TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming"));
 }
 
+void ATankPawn::BeginPlay()
+{
+    Super::BeginPlay();
+    if (!Projectile)
+    {
+        UE_LOG(LogTemp, Error, TEXT("Projectile missing, %s will not be able to fire"), *GetName());
+        canFire = false;
+    }
+    else
+    {
+        canFire = true;
+    }
+}
+
 void ATankPawn::Initialize(UStaticMeshComponent* Barrel)
 {
     this->Barrel = Barrel;
@@ -42,6 +56,11 @@ void ATankPawn::Fire()
     if (IsPendingKillPending())
     {
         UE_LOG(LogTemp, Error, TEXT("Cannot fire, tank %s destroyed"), *GetName());
+        return;
+    }
+
+    if (!canFire)
+    {
         return;
     }
 
