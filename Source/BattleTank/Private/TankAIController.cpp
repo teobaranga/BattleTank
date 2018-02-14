@@ -1,45 +1,53 @@
 // Copyright (c) 2018 Teo Baranga
 
 #include "TankAIController.h"
-#include "TankPlayerController.h"
-#include "Public/TankPawn.h"
+#include "TankAimingComponent.h"
 #include "Engine/World.h"
 
 void ATankAIController::BeginPlay()
 {
     Super::BeginPlay();
+
+    if (APawn* Tank = GetPawn())
+    {
+        TankAimingComponent = Tank->FindComponentByClass<UTankAimingComponent>();
+    }
+    PlayerTank = GetPlayerTank();
+
+    if (!TankAimingComponent)
+    {
+        UE_LOG(LogTemp, Error, TEXT("Tank Aiming Component not found"));
+    }
+    if (!PlayerTank)
+    {
+        UE_LOG(LogTemp, Error, TEXT("Player Tank not found"));
+    }
 }
 
 void ATankAIController::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
-    if (ATankPawn* Tank = GetPawn())
+    if (!TankAimingComponent || !TankAimingComponent->IsRegistered() || !PlayerTank)
     {
-        if (ATankPawn* PlayerTank = GetPlayerTank())
-        {
-            /// Move towards player
-            MoveToActor(PlayerTank, AcceptanceRadius);
-
-            /// Aim at player
-            Tank->AimAt(PlayerTank->GetActorLocation());
-
-            /// Fire if ready
-            GetPawn()->Fire();
-        }
+        return;
     }
+
+    /// Move towards player
+    MoveToActor(PlayerTank, AcceptanceRadius);
+
+    /// Aim at player
+    TankAimingComponent->AimAt(PlayerTank->GetActorLocation());
+
+    /// Fire if ready
+    TankAimingComponent->Fire();
 }
 
-ATankPawn* ATankAIController::GetPawn() const
+APawn* ATankAIController::GetPlayerTank() const
 {
-    return Cast<ATankPawn>(AController::GetPawn());
-}
-
-ATankPawn * ATankAIController::GetPlayerTank() const
-{
-    if (ATankPlayerController* tankPlayerController = Cast<ATankPlayerController>(GetWorld()->GetFirstPlayerController()))
+    if (APlayerController* tankPlayerController = GetWorld()->GetFirstPlayerController())
     {
-        return tankPlayerController->GetTankPawn();
+        return tankPlayerController->GetPawn();
     }
 
     UE_LOG(LogTemp, Error, TEXT("Unexpected player controller. Player Tank could not be found."));

@@ -1,6 +1,7 @@
 // Copyright (c) 2018 Teo Baranga
 
 #include "TankAimingComponent.h"
+#include "Projectile.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/World.h"
@@ -16,6 +17,15 @@ void UTankAimingComponent::Initialize(UStaticMeshComponent* Turret, UStaticMeshC
     this->Turret = Turret;
     this->Barrel = Barrel;
     this->BarrelRotator = BarrelRotator;
+    if (!Projectile)
+    {
+        UE_LOG(LogTemp, Error, TEXT("Projectile missing, %s will not be able to fire"), *GetName());
+        canFire = false;
+    }
+    else
+    {
+        canFire = true;
+    }
 }
 
 void UTankAimingComponent::MoveBarrel(const FVector& AimDirection)
@@ -24,9 +34,6 @@ void UTankAimingComponent::MoveBarrel(const FVector& AimDirection)
 
     FRotator BarrelRotator = Barrel->GetRightVector().ToOrientationRotator();
     FRotator DeltaRotator = AimRotator - BarrelRotator;
-    //UE_LOG(LogTemp, Warning, TEXT("Aim rotator %s"), *AimRotator.ToCompactString());
-    //UE_LOG(LogTemp, Warning, TEXT("Barrel rotator %s"), *BarrelRotator.ToCompactString());
-    //UE_LOG(LogTemp, Warning, TEXT("Delta vector %s"), *DeltaRotator.ToCompactString());
 
     ElevateBarrel(DeltaRotator.Pitch);
 
@@ -65,7 +72,7 @@ void UTankAimingComponent::RotateBarrel(float RelativeSpeed)
     Turret->SetRelativeRotation(Rotation);
 }
 
-void UTankAimingComponent::AimAt(FVector Location, float LaunchSpeed)
+void UTankAimingComponent::AimAt(FVector Location)
 {
     FVector TossVelocity;
     if (UGameplayStatics::SuggestProjectileVelocity(this, TossVelocity, Barrel->GetSocketLocation(FName("Muzzle")), Location, LaunchSpeed,
@@ -75,5 +82,31 @@ void UTankAimingComponent::AimAt(FVector Location, float LaunchSpeed)
         FVector AimDirection = TossVelocity.GetSafeNormal();
         //UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"), *GetOwner()->GetName(), *AimDirection.ToCompactString());
         MoveBarrel(AimDirection);
+    }
+}
+
+void UTankAimingComponent::Fire()
+{
+    if (!IsRegistered())
+    {
+        UE_LOG(LogTemp, Error, TEXT("Cannot fire, tank aiming component on %s not available"), *GetOwner()->GetName());
+        return;
+    }
+
+    if (!canFire)
+    {
+        return;
+    }
+
+    //UE_LOG(LogTemp, Warning, TEXT("Fire!"));
+
+    bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTime;
+
+    if (isReloaded)
+    {
+        FTransform ProjectileSpawnLocation = Barrel->GetSocketTransform(FName("Projectile"));
+        AProjectile* ProjectileInstance = GetWorld()->SpawnActor<AProjectile>(Projectile, ProjectileSpawnLocation);
+        ProjectileInstance->Launch(LaunchSpeed);
+        LastFireTime = FPlatformTime::Seconds();
     }
 }

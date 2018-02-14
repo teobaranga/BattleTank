@@ -6,7 +6,7 @@
 #include "AIController.h"
 #include "TankAIController.generated.h"
 
-class ATankPawn;
+class UTankAimingComponent;
 
 UCLASS()
 class BATTLETANK_API ATankAIController : public AAIController
@@ -19,13 +19,16 @@ protected:
 public:
     virtual void Tick(float DeltaTime) override;
 
-    // Get the Tank Pawn controlled by this AI
-    ATankPawn* GetPawn() const;
-
     // Get the Tank Pawn controlled by the player
-    ATankPawn* GetPlayerTank() const;
+    APawn* GetPlayerTank() const;
 
 private:
+    /* The aiming component of the owned tank */
+    UTankAimingComponent* TankAimingComponent = nullptr;
+
+    /* The tank owned by the player */
+    AActor* PlayerTank = nullptr;
+
     // How close the AI can get to the player
     float AcceptanceRadius = 3000.f;
 };

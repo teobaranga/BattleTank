@@ -6,7 +6,6 @@
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"
 
-class ATankPawn;
 class UTankAimingComponent;
 
 /**
@@ -34,9 +33,6 @@ public:
 
     virtual void PlayerTick(float DeltaTime) override;
 
-    UFUNCTION(BlueprintCallable)
-    ATankPawn* GetTankPawn() const;
-
     UFUNCTION(BlueprintImplementableEvent)
     void FoundAimingComponent(UTankAimingComponent* TankAimingComponent);
     
@@ -49,5 +45,8 @@ private:
 
     /* Get world location of linetrace through crosshair */
     bool GetSightRayHitLocation(FVector& OutHitLocation) const;
+
+    /* The aiming component of the player tank */
+    UTankAimingComponent* TankAimingComponent = nullptr;
 
 };

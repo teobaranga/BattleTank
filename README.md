@@ -6,7 +6,7 @@ An open world head-to-head tank fight game with simple AI, terrain, and advanced
 
 This is my personal implementation of the project with the same name from "The Unreal Engine Developer Course" on Udemy.
 
-**Last completed lecture:** Talking Head - Real World Skills (76/113)
+**Last completed lecture:** Finishing our Refactoring (79/113)
 
 ### Features:
 - Main menu with "Start" and "Quit" buttons

@@ -6,7 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "TankAimingComponent.generated.h"
 
-class UStaticMeshComponent;
+class AProjectile;
 
 UENUM()
 enum class EFiringState : uint8
@@ -25,7 +25,10 @@ public:
     // Sets default values for this component's properties
     UTankAimingComponent();
 
-    void AimAt(FVector Location, float LaunchSpeed);
+    void AimAt(FVector Location);
+
+    UFUNCTION(BlueprintCallable)
+    void Fire();
 
 protected:
     UPROPERTY(BlueprintReadOnly)
@@ -40,6 +43,13 @@ private:
     UStaticMeshComponent* Barrel = nullptr;
 
     USceneComponent* BarrelRotator = nullptr;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Projectile")
+    TSubclassOf<AProjectile> Projectile = nullptr;
+
+    // Muzzle velocity
+    UPROPERTY(EditDefaultsOnly, Category = "Projectile")
+    float LaunchSpeed = 4000; // 4000 cm/s
 
     // Maximum elevation speed of the barrel, in degrees per second
     UPROPERTY(EditDefaultsOnly)
@@ -56,6 +66,12 @@ private:
     // Maximum barrel elevation in degrees
     UPROPERTY(EditDefaultsOnly)
     float MaxElevation = 35.f;
+
+    double ReloadTime = 2;
+
+    double LastFireTime = 0;
+
+    bool canFire = false;
 
     void MoveBarrel(const FVector& AimDirection);
 
