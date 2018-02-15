@@ -25,6 +25,10 @@ public:
     // Sets default values for this component's properties
     UTankAimingComponent();
 
+    void BeginPlay() override;
+
+    void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+
     void AimAt(FVector Location);
 
     UFUNCTION(BlueprintCallable)
@@ -72,6 +76,8 @@ private:
     double LastFireTime = 0;
 
     bool canFire = false;
+
+    bool isAiming = false;
 
     void MoveBarrel(const FVector& AimDirection);
 

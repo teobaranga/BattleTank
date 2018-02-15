@@ -9,7 +9,14 @@
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
 {
-    PrimaryComponentTick.bCanEverTick = false;
+    PrimaryComponentTick.bCanEverTick = true;
+    bAutoActivate = true;
+}
+
+void UTankAimingComponent::BeginPlay()
+{
+    Super::BeginPlay();
+    LastFireTime = FPlatformTime::Seconds();
 }
 
 void UTankAimingComponent::Initialize(UStaticMeshComponent* Turret, UStaticMeshComponent* Barrel, UStaticMeshComponent* BarrelRotator)
@@ -26,6 +33,37 @@ void UTankAimingComponent::Initialize(UStaticMeshComponent* Turret, UStaticMeshC
     {
         canFire = true;
     }
+}
+
+void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
+{
+    switch (FiringState)
+    {
+    case EFiringState::Reloading:
+        // Move to the aiming state if the reloading time has elapsed
+        if ((FPlatformTime::Seconds() - LastFireTime) > ReloadTime)
+        {
+            FiringState = EFiringState::Aiming;
+        }
+        break;
+    case EFiringState::Aiming:
+        // if barrel is not moving, switch to locked
+        if (!isAiming)
+        {
+            FiringState = EFiringState::Locked;
+        }
+        break;
+    case EFiringState::Locked:
+        // if barrel is moving, switch to aiming
+        if (isAiming)
+        {
+            FiringState = EFiringState::Aiming;
+        }
+        break;
+    default:
+        break;
+    }
+    
 }
 
 void UTankAimingComponent::MoveBarrel(const FVector& AimDirection)
@@ -48,6 +86,8 @@ void UTankAimingComponent::MoveBarrel(const FVector& AimDirection)
     }
 
     RotateBarrel(DeltaRotator.Yaw);
+
+    isAiming = !(FMath::IsNearlyZero(DeltaRotator.Pitch, 0.5f) && FMath::IsNearlyZero(DeltaRotator.Yaw, 0.5f));
 }
 
 void UTankAimingComponent::ElevateBarrel(float RelativeSpeed)
@@ -100,13 +140,12 @@ void UTankAimingComponent::Fire()
 
     //UE_LOG(LogTemp, Warning, TEXT("Fire!"));
 
-    bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTime;
-
-    if (isReloaded)
+    if (FiringState != EFiringState::Reloading)
     {
         FTransform ProjectileSpawnLocation = Barrel->GetSocketTransform(FName("Projectile"));
         AProjectile* ProjectileInstance = GetWorld()->SpawnActor<AProjectile>(Projectile, ProjectileSpawnLocation);
         ProjectileInstance->Launch(LaunchSpeed);
         LastFireTime = FPlatformTime::Seconds();
+        FiringState = EFiringState::Reloading;
     }
 }
