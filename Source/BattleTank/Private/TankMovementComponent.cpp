@@ -60,3 +60,15 @@ void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool
     /// Rotate towards the player
     TurnRightIntent(FVector::CrossProduct(TankForward, TankMoveDirection).Z);
 }
+
+void UTankMovementComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
+{
+    Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+    // Compute the velocity sideways
+    float SlipVelocity = FVector::DotProduct(Tank->GetComponentVelocity(), Tank->GetForwardVector());
+
+    FVector CorrectionAcceleration = -SlipVelocity / DeltaTime * Tank->GetForwardVector();
+    FVector CorrectionForce = Tank->GetMass() * CorrectionAcceleration;
+    Tank->AddForce(CorrectionForce);
+}

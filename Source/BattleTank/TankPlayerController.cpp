@@ -7,15 +7,7 @@
 void ATankPlayerController::BeginPlay()
 {
     Super::BeginPlay();
-    TankAimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
-    if (TankAimingComponent)
-    {
-        FoundAimingComponent(TankAimingComponent);
-    }
-    else
-    {
-        UE_LOG(LogTemp, Error, TEXT("Tank Aiming Component not found"));
-    }
+    UE_LOG(LogTemp, Warning, TEXT("BeginPlay"));
 }
 
 void ATankPlayerController::PlayerTick(float DeltaTime)
@@ -23,6 +15,29 @@ void ATankPlayerController::PlayerTick(float DeltaTime)
     Super::PlayerTick(DeltaTime);
 
     AimTowardsCrosshair();
+}
+
+void ATankPlayerController::BeginPlayingState()
+{
+    Super::BeginPlayingState();
+    UE_LOG(LogTemp, Warning, TEXT("BeginPlayingState"));
+    TankAimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+    if (TankAimingComponent)
+    {
+        OnPossess(TankAimingComponent);
+    }
+    else
+    {
+        UE_LOG(LogTemp, Error, TEXT("Tank Aiming Component not found"));
+    }
+}
+
+void ATankPlayerController::EndPlayingState()
+{
+    Super::EndPlayingState();
+    UE_LOG(LogTemp, Warning, TEXT("EndPlayingState"));
+    TankAimingComponent = nullptr;
+    OnUnPossess();
 }
 
 void ATankPlayerController::AimTowardsCrosshair()

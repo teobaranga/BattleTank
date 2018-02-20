@@ -34,7 +34,17 @@ public:
     virtual void PlayerTick(float DeltaTime) override;
 
     UFUNCTION(BlueprintImplementableEvent)
-    void FoundAimingComponent(UTankAimingComponent* TankAimingComponent);
+    void OnPossess(UTankAimingComponent* TankAimingComponent);
+
+    UFUNCTION(BlueprintImplementableEvent)
+    void OnUnPossess();
+
+protected:
+    /** Pawn has been possessed, so changing state to NAME_Playing. Start it walking and begin playing with it. */
+    virtual void BeginPlayingState() override;
+
+    /** Leave playing state. */
+    virtual void EndPlayingState() override;
     
 private:
     /* 

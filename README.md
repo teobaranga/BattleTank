@@ -6,7 +6,7 @@ An open world head-to-head tank fight game with simple AI, terrain, and advanced
 
 This is my personal implementation of the project with the same name from "The Unreal Engine Developer Course" on Udemy.
 
-**Last completed lecture:** Are Two Floats Equal? (81/113)
+**Last completed lecture:** Programmatic Sideways Friction (82/113)
 
 ### Features:
 - Main menu with "Start" and "Quit" buttons

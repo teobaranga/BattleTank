@@ -28,6 +28,8 @@ public:
     // Function called indirectly by the AI controller, which provides info needed to move to the requested target
     void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;
 
+    void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
+
 private:
     // Max force per track, in Newtons
     UPROPERTY(EditDefaultsOnly)
