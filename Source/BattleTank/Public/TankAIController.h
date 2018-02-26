@@ -30,5 +30,6 @@ private:
     AActor* PlayerTank = nullptr;
 
     // How close the AI can get to the player
+    UPROPERTY(EditDefaultsOnly)
     float AcceptanceRadius = 3000.f;
 };

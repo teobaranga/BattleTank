@@ -11,6 +11,7 @@ class AProjectile;
 UENUM()
 enum class EFiringState : uint8
 {
+    OutOfAmmo,
     Reloading,
     Aiming,
     Locked
@@ -34,12 +35,17 @@ public:
     UFUNCTION(BlueprintCallable)
     void Fire();
 
+    EFiringState GetFiringState() const;
+
 protected:
     UPROPERTY(BlueprintReadOnly)
     EFiringState FiringState = EFiringState::Reloading;
 
     UFUNCTION(BlueprintCallable, Category = "Setup")
     void Initialize(UStaticMeshComponent* Turret, UStaticMeshComponent* Barrel, UStaticMeshComponent* BarrelRotator);
+
+    UPROPERTY(BlueprintReadOnly)
+    int Ammo = 3;
 
 private:
     UStaticMeshComponent* Turret = nullptr;

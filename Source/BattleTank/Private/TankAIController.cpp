@@ -34,13 +34,17 @@ void ATankAIController::Tick(float DeltaTime)
     }
 
     /// Move towards player
-    MoveToActor(PlayerTank, AcceptanceRadius);
+    MoveToActor(PlayerTank, AcceptanceRadius, true, true, false);
 
     /// Aim at player
     TankAimingComponent->AimAt(PlayerTank->GetActorLocation());
 
     /// Fire if ready
-    TankAimingComponent->Fire();
+    EFiringState FiringState = TankAimingComponent->GetFiringState();
+    if (FiringState == EFiringState::Locked)
+    {
+        TankAimingComponent->Fire();
+    }
 }
 
 APawn* ATankAIController::GetPlayerTank() const

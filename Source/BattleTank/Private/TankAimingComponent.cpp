@@ -133,19 +133,32 @@ void UTankAimingComponent::Fire()
         return;
     }
 
-    if (!canFire)
+    if (!canFire || Ammo <= 0)
     {
         return;
     }
 
     //UE_LOG(LogTemp, Warning, TEXT("Fire!"));
 
-    if (FiringState != EFiringState::Reloading)
+    if (FiringState == EFiringState::Aiming || FiringState == EFiringState::Locked)
     {
         FTransform ProjectileSpawnLocation = Barrel->GetSocketTransform(FName("Projectile"));
         AProjectile* ProjectileInstance = GetWorld()->SpawnActor<AProjectile>(Projectile, ProjectileSpawnLocation);
         ProjectileInstance->Launch(LaunchSpeed);
         LastFireTime = FPlatformTime::Seconds();
-        FiringState = EFiringState::Reloading;
+
+        if (--Ammo <= 0)
+        {
+            FiringState = EFiringState::OutOfAmmo;
+        }
+        else
+        {
+            FiringState = EFiringState::Reloading;
+        }
     }
+}
+
+EFiringState UTankAimingComponent::GetFiringState() const
+{
+    return FiringState;
 }
