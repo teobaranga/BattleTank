@@ -17,7 +17,12 @@ enum class EFiringState : uint8
     Locked
 };
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+/**
+ * Aiming component for a tank-like actor.
+ *
+ * Note: the associated actor must have its forward vector pointing in the Y axis
+ */
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class BATTLETANK_API UTankAimingComponent : public UActorComponent
 {
     GENERATED_BODY()
@@ -48,10 +53,16 @@ protected:
     int Ammo = 3;
 
 private:
+    // Turret component - rotates around the Z axis
     UStaticMeshComponent* Turret = nullptr;
 
+    // The barrel component - rotates around the Y axis
     UStaticMeshComponent* Barrel = nullptr;
 
+    /**
+     * The barrel joint - this is needed when the elevation axis of rotation is
+     * different from the barrel's origin
+     */
     USceneComponent* BarrelRotator = nullptr;
 
     UPROPERTY(EditDefaultsOnly, Category = "Projectile")
@@ -76,6 +87,12 @@ private:
     // Maximum barrel elevation in degrees
     UPROPERTY(EditDefaultsOnly)
     float MaxElevation = 35.f;
+
+    // Socket name of the barrel muzzle - used for projectile calculations
+    static const FName BarrelMuzzleSocketName;
+
+    // Socket name of the barrel projectile - used for projectile spawning
+    static const FName BarrelProjectileSocketName;
 
     double ReloadTime = 2;
 

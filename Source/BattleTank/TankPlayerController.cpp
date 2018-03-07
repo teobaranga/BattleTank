@@ -20,7 +20,6 @@ void ATankPlayerController::PlayerTick(float DeltaTime)
 void ATankPlayerController::BeginPlayingState()
 {
     Super::BeginPlayingState();
-    UE_LOG(LogTemp, Warning, TEXT("BeginPlayingState"));
     TankAimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
     if (TankAimingComponent)
     {
@@ -35,7 +34,6 @@ void ATankPlayerController::BeginPlayingState()
 void ATankPlayerController::EndPlayingState()
 {
     Super::EndPlayingState();
-    UE_LOG(LogTemp, Warning, TEXT("EndPlayingState"));
     TankAimingComponent = nullptr;
     OnUnPossess();
 }

@@ -6,6 +6,9 @@
 #include "Components/StaticMeshComponent.h"
 #include "Engine/World.h"
 
+const FName UTankAimingComponent::BarrelMuzzleSocketName = FName("Muzzle");
+const FName UTankAimingComponent::BarrelProjectileSocketName = FName("Projectile");
+
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
 {
@@ -26,12 +29,20 @@ void UTankAimingComponent::Initialize(UStaticMeshComponent* Turret, UStaticMeshC
     this->BarrelRotator = BarrelRotator;
     if (!Projectile)
     {
-        UE_LOG(LogTemp, Error, TEXT("Projectile missing, %s will not be able to fire"), *GetName());
+        UE_LOG(LogTemp, Error, TEXT("%s - Projectile missing, firing disabled"), *GetOwner()->GetName());
         canFire = false;
     }
     else
     {
         canFire = true;
+    }
+    if (!this->Barrel->DoesSocketExist(BarrelMuzzleSocketName))
+    {
+        UE_LOG(LogTemp, Warning, TEXT("%s - Missing barrel muzzle socket"), *GetOwner()->GetName());
+    }
+    if (!this->Barrel->DoesSocketExist(BarrelProjectileSocketName))
+    {
+        UE_LOG(LogTemp, Warning, TEXT("%s - Missing barrel projectile socket"), *GetOwner()->GetName());
     }
 }
 
@@ -76,16 +87,14 @@ void UTankAimingComponent::MoveBarrel(const FVector& AimDirection)
     ElevateBarrel(DeltaRotator.Pitch);
 
     /// Make sure that the turret picks the smallest rotation when turning towards the aim point
-    if (DeltaRotator.Yaw < -180.f)
+    if (FMath::Abs(DeltaRotator.Yaw) < 180.f)
     {
-        DeltaRotator.Yaw += 360.f;
+        RotateBarrel(DeltaRotator.Yaw);
     }
-    else if (DeltaRotator.Yaw > 180.f)
+    else
     {
-        DeltaRotator.Yaw -= 360.f;
+        RotateBarrel(-DeltaRotator.Yaw);
     }
-
-    RotateBarrel(DeltaRotator.Yaw);
 
     isAiming = !(FMath::IsNearlyZero(DeltaRotator.Pitch, 0.5f) && FMath::IsNearlyZero(DeltaRotator.Yaw, 0.5f));
 }
@@ -115,7 +124,7 @@ void UTankAimingComponent::RotateBarrel(float RelativeSpeed)
 void UTankAimingComponent::AimAt(FVector Location)
 {
     FVector TossVelocity;
-    if (UGameplayStatics::SuggestProjectileVelocity(this, TossVelocity, Barrel->GetSocketLocation(FName("Muzzle")), Location, LaunchSpeed,
+    if (UGameplayStatics::SuggestProjectileVelocity(this, TossVelocity, Barrel->GetSocketLocation(BarrelMuzzleSocketName), Location, LaunchSpeed,
         false, 0, 0, ESuggestProjVelocityTraceOption::OnlyTraceWhileAscending, FCollisionResponseParams::DefaultResponseParam, TArray<AActor*>(), false)
         )
     {
@@ -142,7 +151,7 @@ void UTankAimingComponent::Fire()
 
     if (FiringState == EFiringState::Aiming || FiringState == EFiringState::Locked)
     {
-        FTransform ProjectileSpawnLocation = Barrel->GetSocketTransform(FName("Projectile"));
+        FTransform ProjectileSpawnLocation = Barrel->GetSocketTransform(BarrelProjectileSocketName);
         AProjectile* ProjectileInstance = GetWorld()->SpawnActor<AProjectile>(Projectile, ProjectileSpawnLocation);
         ProjectileInstance->Launch(LaunchSpeed);
         LastFireTime = FPlatformTime::Seconds();
