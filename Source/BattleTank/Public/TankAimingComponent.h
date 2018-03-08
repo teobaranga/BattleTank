@@ -43,28 +43,21 @@ public:
     EFiringState GetFiringState() const;
 
 protected:
+    /** The current firing state */
     UPROPERTY(BlueprintReadOnly)
     EFiringState FiringState = EFiringState::Reloading;
 
+    /**
+     * Initialize the aiming component.
+     */
     UFUNCTION(BlueprintCallable, Category = "Setup")
     void Initialize(UStaticMeshComponent* Turret, UStaticMeshComponent* Barrel, UStaticMeshComponent* BarrelRotator);
 
+    // Current ammo
     UPROPERTY(BlueprintReadOnly)
     int Ammo = 3;
 
 private:
-    // Turret component - rotates around the Z axis
-    UStaticMeshComponent* Turret = nullptr;
-
-    // The barrel component - rotates around the Y axis
-    UStaticMeshComponent* Barrel = nullptr;
-
-    /**
-     * The barrel joint - this is needed when the elevation axis of rotation is
-     * different from the barrel's origin
-     */
-    USceneComponent* BarrelRotator = nullptr;
-
     UPROPERTY(EditDefaultsOnly, Category = "Projectile")
     TSubclassOf<AProjectile> Projectile = nullptr;
 
@@ -94,6 +87,18 @@ private:
     // Socket name of the barrel projectile - used for projectile spawning
     static const FName BarrelProjectileSocketName;
 
+    // Turret component - rotates around the Z axis
+    UStaticMeshComponent* Turret = nullptr;
+
+    // The barrel component - rotates around the Y axis
+    UStaticMeshComponent* Barrel = nullptr;
+
+    /**
+    * The barrel joint - this is needed when the elevation axis of rotation is
+    * different from the barrel's origin
+    */
+    USceneComponent* BarrelRotator = nullptr;
+
     double ReloadTime = 2;
 
     double LastFireTime = 0;
@@ -104,8 +109,11 @@ private:
 
     void MoveBarrel(const FVector& AimDirection);
 
-    // Move the barrel up or down
-    // -1 is max downward speed, +1 is max up movement
+    /**
+     * Move the barrel up or down
+     *
+     * @param RelativeSpeed: -1 is max downward speed, +1 is max up movement
+     */
     void ElevateBarrel(float RelativeSpeed);
     
     // Rotate the turret around its Z-axis

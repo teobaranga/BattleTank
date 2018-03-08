@@ -74,7 +74,7 @@ void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickTy
     default:
         break;
     }
-    
+
 }
 
 void UTankAimingComponent::MoveBarrel(const FVector& AimDirection)
@@ -86,7 +86,7 @@ void UTankAimingComponent::MoveBarrel(const FVector& AimDirection)
 
     ElevateBarrel(DeltaRotator.Pitch);
 
-    /// Make sure that the turret picks the smallest rotation when turning towards the aim point
+    // Make sure that the turret picks the smallest rotation when turning towards the aim point
     if (FMath::Abs(DeltaRotator.Yaw) < 180.f)
     {
         RotateBarrel(DeltaRotator.Yaw);
