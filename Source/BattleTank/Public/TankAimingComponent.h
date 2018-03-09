@@ -54,16 +54,19 @@ protected:
     void Initialize(UStaticMeshComponent* Turret, UStaticMeshComponent* Barrel, UStaticMeshComponent* BarrelRotator);
 
     // Current ammo
-    UPROPERTY(BlueprintReadOnly)
-    int Ammo = 3;
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Firing")
+    int32 Ammo = 3;
 
 private:
-    UPROPERTY(EditDefaultsOnly, Category = "Projectile")
+    UPROPERTY(EditDefaultsOnly, Category = "Firing")
     TSubclassOf<AProjectile> Projectile = nullptr;
 
     // Muzzle velocity
-    UPROPERTY(EditDefaultsOnly, Category = "Projectile")
+    UPROPERTY(EditDefaultsOnly, Category = "Firing")
     float LaunchSpeed = 4000; // 4000 cm/s
+
+    UPROPERTY(EditDefaultsOnly, Category="Firing")
+    double ReloadTime = 0.1;
 
     // Maximum elevation speed of the barrel, in degrees per second
     UPROPERTY(EditDefaultsOnly)
@@ -98,8 +101,6 @@ private:
     * different from the barrel's origin
     */
     USceneComponent* BarrelRotator = nullptr;
-
-    double ReloadTime = 2;
 
     double LastFireTime = 0;
 

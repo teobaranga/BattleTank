@@ -24,6 +24,12 @@ protected:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     UProjectileMovementComponent* ProjectileMovementComponent = nullptr;
 
+    UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+    UStaticMeshComponent* CollisionMesh = nullptr;
+
+    UPROPERTY(VisibleAnywhere)
+    UParticleSystemComponent* LaunchBlast = nullptr;
+
 public:	
     // Called every frame
     virtual void Tick(float DeltaTime) override;
