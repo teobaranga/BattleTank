@@ -7,6 +7,7 @@
 #include "Projectile.generated.h"
 
 class UProjectileMovementComponent;
+class UParticleSystemComponent;
 
 UCLASS()
 class BATTLETANK_API AProjectile : public AActor
@@ -18,17 +19,29 @@ public:
     AProjectile();
 
 protected:
-    // Called when the game starts or when spawned
-    virtual void BeginPlay() override;
-
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
     UProjectileMovementComponent* ProjectileMovementComponent = nullptr;
 
     UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
     UStaticMeshComponent* CollisionMesh = nullptr;
-
+    
     UPROPERTY(VisibleAnywhere)
     UParticleSystemComponent* LaunchBlast = nullptr;
+
+    UPROPERTY(VisibleAnywhere)
+    UParticleSystemComponent* ImpactBlast = nullptr;
+
+    // Called when the game starts or when spawned
+    virtual void BeginPlay() override;
+    
+    UFUNCTION()
+    void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+
+    UFUNCTION()
+    void OnLaunchBlastFinished(UParticleSystemComponent* PSystem);
+
+    UFUNCTION()
+    void OnImpactBlastFinished(UParticleSystemComponent* PSystem);
 
 public:	
     // Called every frame
@@ -36,5 +49,10 @@ public:
 
     // Launch this projectile
     void Launch(float Speed);
+
+private:
+    bool LaunchBlastFinished = false;
+
+    bool ImpactBlastFinished = false;
     
 };
