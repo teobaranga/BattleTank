@@ -2,8 +2,11 @@
 
 #include "Projectile.h"
 #include "Components/StaticMeshComponent.h"
+#include "GameFramework/DamageType.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "PhysicsEngine/RadialForceComponent.h"
 
 
 // Sets default values
@@ -26,6 +29,9 @@ AProjectile::AProjectile()
 
     ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Projectile Movement"));
     ProjectileMovementComponent->bAutoActivate = false;
+
+    ExplosionForce = CreateDefaultSubobject<URadialForceComponent>(FName("Explosion Force"));
+    ExplosionForce->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -41,6 +47,17 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 {
     LaunchBlast->Deactivate();
     ImpactBlast->Activate();
+
+    UGameplayStatics::ApplyRadialDamage(
+        this,
+        Damage,
+        GetActorLocation(),
+        ExplosionForce->Radius, // For consistency
+        UDamageType::StaticClass(),
+        TArray<AActor*>() // Damage all actors
+    );
+
+    //SetRootComponent(ImpactBlast); // Might wanna do this
     CollisionMesh->DestroyComponent();
 }
 
@@ -49,6 +66,7 @@ void AProjectile::OnLaunchBlastFinished(UParticleSystemComponent* PSystem)
     LaunchBlastFinished = true;
     if (ImpactBlastFinished)
     {
+        // Destroy the projectile if all the particle fx have completed
         Destroy();
     }
 }
@@ -58,6 +76,7 @@ void AProjectile::OnImpactBlastFinished(UParticleSystemComponent* PSystem)
     ImpactBlastFinished = true;
     if (LaunchBlastFinished)
     {
+        // Destroy the projectile if all the particle fx have completed
         Destroy();
     }
 }
@@ -72,5 +91,5 @@ void AProjectile::Launch(float Speed)
 {
     ProjectileMovementComponent->SetVelocityInLocalSpace(FVector::RightVector * Speed);
     ProjectileMovementComponent->Activate();
+    ExplosionForce->FireImpulse();
 }
-

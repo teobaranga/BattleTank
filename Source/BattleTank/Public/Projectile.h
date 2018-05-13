@@ -8,6 +8,7 @@
 
 class UProjectileMovementComponent;
 class UParticleSystemComponent;
+class URadialForceComponent;
 
 UCLASS()
 class BATTLETANK_API AProjectile : public AActor
@@ -31,6 +32,10 @@ protected:
     UPROPERTY(VisibleAnywhere)
     UParticleSystemComponent* ImpactBlast = nullptr;
 
+    UPROPERTY(VisibleAnywhere)
+    URadialForceComponent* ExplosionForce = nullptr;
+
+
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
     
@@ -44,6 +49,9 @@ protected:
     void OnImpactBlastFinished(UParticleSystemComponent* PSystem);
 
 public:	
+    UPROPERTY(EditDefaultsOnly)
+    float Damage = 20.f;
+
     // Called every frame
     virtual void Tick(float DeltaTime) override;
 

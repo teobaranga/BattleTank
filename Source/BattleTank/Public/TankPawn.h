@@ -20,4 +20,11 @@ public:
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
+    UPROPERTY(EditDefaultsOnly, Category = "Setup")
+    float InitialHealth = 100.f;
+
+    UPROPERTY(VisibleAnywhere, Category = "Setup")
+    float Health = InitialHealth;
+
+    float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 };
