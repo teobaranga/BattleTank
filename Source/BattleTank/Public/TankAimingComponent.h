@@ -27,7 +27,7 @@ class BATTLETANK_API UTankAimingComponent : public UActorComponent
 {
     GENERATED_BODY()
 
-public:
+public:	
     // Sets default values for this component's properties
     UTankAimingComponent();
 
@@ -102,9 +102,6 @@ private:
     */
     USceneComponent* BarrelRotator = nullptr;
 
-    // The actors to be ignored when aiming. By default, this is simply the Tank pawn.
-    TArray<AActor*> AimActorsToIgnore;
-
     double LastFireTime = 0;
 
     bool canFire = false;
@@ -119,7 +116,7 @@ private:
      * @param RelativeSpeed: -1 is max downward speed, +1 is max up movement
      */
     void ElevateBarrel(float RelativeSpeed);
-
+    
     // Rotate the turret around its Z-axis
     void RotateBarrel(float RelativeSpeed);
 };

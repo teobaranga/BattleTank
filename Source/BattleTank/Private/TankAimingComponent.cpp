@@ -5,7 +5,6 @@
 #include "Kismet/GameplayStatics.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/World.h"
-#include "DrawDebugHelpers.h"
 
 const FName UTankAimingComponent::BarrelMuzzleSocketName = FName("Muzzle");
 const FName UTankAimingComponent::BarrelProjectileSocketName = FName("Projectile");
@@ -19,6 +18,7 @@ UTankAimingComponent::UTankAimingComponent()
 
 void UTankAimingComponent::BeginPlay()
 {
+    Super::BeginPlay();
     LastFireTime = FPlatformTime::Seconds();
 }
 
@@ -27,7 +27,6 @@ void UTankAimingComponent::Initialize(UStaticMeshComponent* Turret, UStaticMeshC
     this->Turret = Turret;
     this->Barrel = Barrel;
     this->BarrelRotator = BarrelRotator;
-    this->AimActorsToIgnore = { GetOwner() };
     if (!Projectile)
     {
         UE_LOG(LogTemp, Error, TEXT("%s - Projectile missing, firing disabled"), *GetOwner()->GetName());
@@ -126,7 +125,7 @@ void UTankAimingComponent::AimAt(FVector Location)
 {
     FVector TossVelocity;
     if (UGameplayStatics::SuggestProjectileVelocity(this, TossVelocity, Barrel->GetSocketLocation(BarrelMuzzleSocketName), Location, LaunchSpeed,
-        false, 0, 0, ESuggestProjVelocityTraceOption::OnlyTraceWhileAscending, FCollisionResponseParams::DefaultResponseParam, AimActorsToIgnore, false)
+        false, 0, 0, ESuggestProjVelocityTraceOption::OnlyTraceWhileAscending, FCollisionResponseParams::DefaultResponseParam, TArray<AActor*>(), false)
         )
     {
         FVector AimDirection = TossVelocity.GetSafeNormal();
