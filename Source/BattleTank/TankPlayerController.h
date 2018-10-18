@@ -15,7 +15,7 @@ UCLASS()
 class BATTLETANK_API ATankPlayerController : public APlayerController
 {
     GENERATED_BODY()
-    
+
 public:
     // Note: must match UI
     UPROPERTY(EditDefaultsOnly)
@@ -45,9 +45,9 @@ protected:
 
     /** Leave playing state. */
     virtual void EndPlayingState() override;
-    
+
 private:
-    /* 
+    /*
     Aim the tank barrel so that a shot fired would land where the crosshair
     intersects the world
     */
@@ -58,5 +58,8 @@ private:
 
     /* The aiming component of the player tank */
     UTankAimingComponent* TankAimingComponent = nullptr;
+
+    /* Collision parameters that ignore the attached Tank pawn. */
+    FCollisionQueryParams TankCollisionQueryParams;
 
 };

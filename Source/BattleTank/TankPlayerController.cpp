@@ -8,6 +8,9 @@ void ATankPlayerController::BeginPlay()
 {
     Super::BeginPlay();
     UE_LOG(LogTemp, Warning, TEXT("BeginPlay"));
+
+    TankCollisionQueryParams = FCollisionQueryParams::DefaultQueryParam;
+    TankCollisionQueryParams.AddIgnoredActor(GetPawn());
 }
 
 void ATankPlayerController::PlayerTick(float DeltaTime)
@@ -68,14 +71,25 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) cons
     FVector WorldLocation, WorldDirection;
     if (DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, WorldLocation, WorldDirection))
     {
+        //DrawDebugSphere(GetWorld(), WorldLocation, 20.f, 10, FColor::Red, false, 1.f, 0, 10.f);
+
         /// Line-trace along that look direction, and see what we hit (up to a max range)
         FHitResult HitResult;
         if (GetWorld()->LineTraceSingleByChannel(HitResult, WorldLocation, WorldLocation + WorldDirection * LineTraceRange,
-                                                ECollisionChannel::ECC_Visibility))
+                                                ECollisionChannel::ECC_Visibility, TankCollisionQueryParams))
         {
             OutHitLocation = HitResult.Location;
+            //DrawDebugSphere(GetWorld(), OutHitLocation, 20.f, 10, FColor::Blue, false, 1.f, 0, 10.f);
             return true;
         }
+        else
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Line trace failed at %s in dir %s"), *WorldLocation.ToCompactString(), *WorldDirection.ToCompactString());
+        }
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Unable to deproject screen coords (%.2f, %.2f) to world"), ScreenLocation.X, ScreenLocation.Y);
     }
 
     return false;
