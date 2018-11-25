@@ -10,6 +10,11 @@ ATankPawn::ATankPawn()
     PrimaryActorTick.bCanEverTick = false;
 }
 
+float ATankPawn::GetHealthPercent() const
+{
+    return Health / InitialHealth;
+}
+
 // Called to bind functionality to input
 void ATankPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
