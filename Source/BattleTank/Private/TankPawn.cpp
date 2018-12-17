@@ -10,6 +10,13 @@ ATankPawn::ATankPawn()
     PrimaryActorTick.bCanEverTick = false;
 }
 
+void ATankPawn::BeginPlay()
+{
+    Super::BeginPlay();
+
+    Health = InitialHealth;
+}
+
 float ATankPawn::GetHealthPercent() const
 {
     return Health / InitialHealth;
@@ -35,7 +42,7 @@ float ATankPawn::TakeDamage(float Damage, FDamageEvent const & DamageEvent, ACon
 
     if (Health <= 0.f)
     {
-        UE_LOG(LogTemp, Warning, TEXT("Tank %s is ded"), *GetName());
+        OnDeath.Broadcast();
     }
 
     return ActualDamage;

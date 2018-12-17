@@ -47,6 +47,9 @@ protected:
     virtual void EndPlayingState() override;
 
 private:
+    UFUNCTION()
+    void OnTankDeath();
+
     /*
     Aim the tank barrel so that a shot fired would land where the crosshair
     intersects the world
@@ -55,6 +58,8 @@ private:
 
     /* Get world location of linetrace through crosshair */
     bool GetSightRayHitLocation(FVector& OutHitLocation) const;
+
+    virtual void SetPawn(APawn* InPawn) override;
 
     /* The aiming component of the player tank */
     UTankAimingComponent* TankAimingComponent = nullptr;

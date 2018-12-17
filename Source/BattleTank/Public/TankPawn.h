@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "TankPawn.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTankDeath);
 
 UCLASS()
 class BATTLETANK_API ATankPawn : public APawn
@@ -23,13 +24,17 @@ public:
     // Called by the engine when actor damage is dealt
     float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
+    FTankDeath OnDeath;
+
 private:
     // Sets default values for this pawn's properties
     ATankPawn();
+
+    void BeginPlay() override;
 
     UPROPERTY(EditDefaultsOnly, Category = "Setup")
     float InitialHealth = 100.f;
 
     UPROPERTY(VisibleAnywhere, Category = "Setup")
-    float Health = InitialHealth;
+    float Health;
 };

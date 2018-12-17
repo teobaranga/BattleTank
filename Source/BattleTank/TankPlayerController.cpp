@@ -1,7 +1,8 @@
 // Copyright (c) 2018 Teo Baranga
 
 #include "TankPlayerController.h"
-#include "Public/TankAimingComponent.h"
+#include "TankAimingComponent.h"
+#include "TankPawn.h"
 #include "Engine/World.h"
 
 void ATankPlayerController::BeginPlay()
@@ -93,4 +94,22 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) cons
     }
 
     return false;
+}
+
+void ATankPlayerController::OnTankDeath()
+{
+    UE_LOG(LogTemp, Warning, TEXT("[%s] Tank pawn is dead"), *(this->GetName()));
+
+    StartSpectatingOnly();
+}
+
+void ATankPlayerController::SetPawn(APawn * InPawn)
+{
+    Super::SetPawn(InPawn);
+
+    ATankPawn* PossessedTank;
+    if (InPawn && ensure((PossessedTank = Cast<ATankPawn>(InPawn)) != 0))
+    {
+        PossessedTank->OnDeath.AddUniqueDynamic(this, &ATankPlayerController::OnTankDeath);
+    }
 }
