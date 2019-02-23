@@ -77,7 +77,7 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) cons
         /// Line-trace along that look direction, and see what we hit (up to a max range)
         FHitResult HitResult;
         if (GetWorld()->LineTraceSingleByChannel(HitResult, WorldLocation, WorldLocation + WorldDirection * LineTraceRange,
-                                                ECollisionChannel::ECC_Visibility, TankCollisionQueryParams))
+                                                ECollisionChannel::ECC_Camera, TankCollisionQueryParams))
         {
             OutHitLocation = HitResult.Location;
             //DrawDebugSphere(GetWorld(), OutHitLocation, 20.f, 10, FColor::Blue, false, 1.f, 0, 10.f);

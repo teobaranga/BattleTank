@@ -47,6 +47,7 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 {
     LaunchBlast->Deactivate();
     ImpactBlast->Activate();
+    ExplosionForce->FireImpulse();
 
     UGameplayStatics::ApplyRadialDamage(
         this,
@@ -91,5 +92,4 @@ void AProjectile::Launch(float Speed)
 {
     ProjectileMovementComponent->SetVelocityInLocalSpace(FVector::RightVector * Speed);
     ProjectileMovementComponent->Activate();
-    ExplosionForce->FireImpulse();
 }
